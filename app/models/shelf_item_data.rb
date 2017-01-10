@@ -28,7 +28,7 @@ class ShelfItemData
   end
 
   def highlight=(value)
-    @shelfrank = value ? 50 : 15
+    @shelfrank = value ? 15 : 15
     @highlight = value
   end
 
@@ -63,7 +63,7 @@ class ShelfItemData
             return height
           end
         end
-        # Common sizes for sound recordings 
+        # Common sizes for sound recordings
         case
         when physical_display.first.include?("4 3/4 in.")
           return 12

@@ -35,6 +35,7 @@ $(document).ready(function(){
 });
 
 
+
 function resizeStack() {
   var stackheight = $(window).height();
   $('#basic-stack').css('height', stackheight);
@@ -43,7 +44,7 @@ function resizeStack() {
   //
   // Setting "overflow: hidden" on stack-items does the same
   // thing but has the disadvantage that it disables scrolling
-  // alltogether :(
+  // altogether :(
   var wrapperWidth = $('#basic-stack').width();
   $('.stack-items').width(wrapperWidth-10);
 }

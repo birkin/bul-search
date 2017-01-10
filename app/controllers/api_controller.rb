@@ -74,7 +74,7 @@ class ApiController < ApplicationController
           d.title = d.title + "<br/>" + d.id + ": " + d.callnumbers.join(",")
         end
         d.link = "#{catalog_url(d.id)}"
-        d.highlight = (d.id == id)
+        d.highlight = false # (d.id == id)
       end
     end
     nearby_response = {

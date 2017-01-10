@@ -8,14 +8,6 @@
   <%= javascript_include_tag 'browse_index', 'data-turbolinks-track' => true %>
 
   <style>
-    .noscrollbars {
-      overflow: hidden;
-    }
-
-    .left-panel {
-      margin-top: 60px;
-      padding-left: 40px;
-    }
 
     .stackview .ribbon {
       position: absolute;
@@ -26,83 +18,152 @@
       margin-left: 20px;
     }
 
-    .previewPanel {
-      height: 40%;
-      border-color: #7a1313; /* dark red */
+    #previewPanel {
+      border-color: #7a1313;  /* dark red */
       border-width: 5px;
       border-style: solid;
       background-color: beige;
-      margin-top: 60px;
+      margin-top: 160px;
       margin-right: 60px;
       padding-left: 20px;
       padding-right: 20px;
       padding-bottom: 20px;
+      position: fixed;
+      top: 200;
+      left: 70%;
+      z-index: 100;
+      opacity: .8;
+    }
+
+    h3#previewTitle {
+      font-size: 2vw;
     }
 
     .banner {
-      font-size: 39px;
-	    font-family: Futura,Trebuchet MS,Arial,sans-serif;
+      position: fixed;
+      z-index: 100;
+      background-color: white;
+      padding-left: 80px;
     }
 
-    .banner2 {
+    h2#bannerTitle {
       font-family: Futura,Trebuchet MS,Arial,sans-serif;
-      font-size: larger;
+      font-size: 50px;
     }
 
+    .stack-navigation {
+      top: 0;
+      position: fixed;
+      left: 190%;
+    }
+
+    #content {
+      margin-left: -75px;
+    }
+
+    .spine-title, .stack-serial .spine-title, .stack-videofilm .spine-text {
+      font-size: 18px;  /* 1.2em works for all except videofilm */
+      font-weight: normal;
+    }
+
+    /*
+     * ---------------------------------
+     * Other colors that we could change
+     * ---------------------------------
+
+    .heat2 .stack-cover {
+      border-color: black;
+      background: yellow;
+    }
+
+    .heat2 .stack-pages {
+      border-color: red;
+    }
+
+    .heat2 a {
+      background-color: green;
+      color: white !important;
+      text-shadow: 0 1px 0 brown;
+      border-color: purple;
+    }
+
+    .heat2 a:hover {
+      color: orange;
+    }
+
+    .heat2 .serial-edge {
+      background-color: red;
+      border-color: blue;
+    }
+
+    .stack-items a:focus {
+      background: #b5d1ff;
+      outline-color: red;
+    }
+
+    * ---------------------------------
+    */
   </style>
 </head>
 
 <body>
-  <div class="row noscrollbars">
 
-    <!-- left panel: general info -->
-    <div class="col-md-2 noscrollbars left-panel" style="height: 100%;">
-      <img src="https://www.brown.edu/sites/default/themes/pawtuxet/img/brown-logo.png"/>
-      <h2 class="banner">StackLife</h2>
-      <div class="banner2">
-        <p>Welcome to the stacks</p>
-        <p>Use this page to explore what other items (books, DVDs, serials) are
-          the shelf.</p>
-      </div>
-      <div style="position: fixed; bottom: 0;">
-        <p><%= link_to("About", browse_about_path) %></p>
-      </div>
-    </div>
-
-    <!-- middle panel: virtual stack -->
-    <div class="col-md-6 noscrollbars">
-      <div id="basic-stack"></div>
-    </div>
-
-    <!-- right panel: book details -->
-    <div class="col-md-4 noscrollbars">
-      <div id="previewPanel" class="previewPanel hidden">
-        <h3 id="previewTitle"></h3>
-        <h4 id="previewAuthor"></h4>
-        <div>
-          <span id="previewImprint"></span>
-        </div>
-        <div><p>&nbsp;</p></div>
-        <div>
-          <a id="previewLinkImage" href="" target="_blank">
-            <%= image_tag("sampleCover.png", {id: "previewImage", style: "border: 1px solid; width: 116px; height: 173px;"})%>
-          </a>
-        </div>
-        <div><p>&nbsp;</p></div>
-        <div>
-          <a id="previewLink" href="" target="_blank"
-          title="View full information about this item including availability and how to check it out.">View the full record</a>
-        </div>
-      </div>
-    </div>
-
-    <span id="initialID" class="hidden"><%= id %></span>
-    <!-- we use these to reset the values via JavaScript -->
-    <%= image_tag("sampleCover.png", {id: "previewImageNone", class: "hidden"})%>
-    <%= image_tag("placeholder.gif", {id: "previewImageLoading", class: "hidden"})%>
+  <!-- top panel: general info -->
+  <div class="banner">
+    <img src="https://www.brown.edu/sites/default/themes/pawtuxet/img/brown-logo.png"
+      style="position: absolute; left: 10px; top: 20px;"/>
+    <h2 id="bannerTitle">StackLife</h2>
+    <p>Welcome to the stacks. Use this page to explore items (books, DVDs,
+      serials) that are the shelf. Click <%= link_to("here", browse_about_path) %>
+      to learn more about it.
+      <br/></p>
   </div>
+
+
+  <span id="initialID" class="hidden"><%= id %></span>
+  <!-- we use these to reset the values via JavaScript -->
+  <%= image_tag("sampleCover.png", {id: "previewImageNone", class: "hidden"})%>
+  <%= image_tag("placeholder.gif", {id: "previewImageLoading", class: "hidden"})%>
+
+
+  <!-- middle panel: virtual stack -->
+  <div id="content" class="col-md-12">
+
+    <!-- book preview panel: book details -->
+    <div id="previewPanel" class="hidden">
+      <h3 id="previewTitle"></h3>
+      <h4 id="previewAuthor"></h4>
+      <div>
+        <span id="previewImprint"></span>
+      </div>
+      <div><p>&nbsp;</p></div>
+      <div>
+        <a id="previewLinkImage" href="" target="_blank">
+          <%= image_tag("sampleCover.png", {id: "previewImage", style: "border: 1px solid; width: 116px; height: 173px;"})%>
+        </a>
+      </div>
+      <div><p>&nbsp;</p></div>
+      <div>
+        <a id="previewLink" href="" target="_blank"
+        title="View full information about this item including availability and how to check it out.">View the full record</a>
+      </div>
+    </div>
+
+    <div id="basic-stack"></div>
+  </div>
+
 
   <script>
     var josiahRootUrl = '<%= root_url %>';
+
+    setTimeout(function() {
+      // TODO: Figure out the correct li to focus on.
+      var li = $(".stack-item>a")[12];
+      $('.active-item').removeClass('active-item');
+      $(li).addClass('active-item');
+      $(li).click();
+      $(li).focus();
+    }, 500);
+
   </script>
 </body>
